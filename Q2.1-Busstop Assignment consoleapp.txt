@@ -1,0 +1,147 @@
+Q.2.1 First Query
+
+
+using System;
+using System.Data.SqlClient;
+
+namespace BusstopAssgQ2._1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            try
+            {
+                string ConString = "data source=INLEN8520076178\\SQLEXPRESS; database=BusstopDB  ; integrated security=true";
+                using (SqlConnection connection = new SqlConnection(ConString))
+                {
+                    // Creating the command object
+                    SqlCommand cmd = new SqlCommand("select BoardingPoint,TravelDate from BusInfo where Amount>450 ", connection);
+                    // Opening Connection  
+                    connection.Open();
+                    // Executing the SQL query  
+                    SqlDataReader sdr = cmd.ExecuteReader();
+                    //Looping through each record
+                    while (sdr.Read())
+                    {
+                        Console.WriteLine(sdr["BoardingPoint"] + ",  " + sdr["TravelDate"]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("OOPs, something went wrong.\n" + e);
+            }
+            Console.ReadKey();
+        }
+    }
+}
+
+output:HYD,  05-10-2017 00:00:00
+PUN,  10-12-2017 00:00:00
+MUM,  28-01-2017 00:00:00
+MUM,  06-11-2016 00:00:00
+
+
+
+=======================================================================================================
+Q.2.1 Second Query 
+for this create vie in sql (CREATE VIEW Bus AS
+select BusId,BoardingPoint from BusInfo where Rating>3;)
+
+
+using System;
+using System.Data.SqlClient;
+
+namespace BusstopAssgQ2._1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            try
+            {
+                string ConString = "data source=INLEN8520076178\\SQLEXPRESS; database=BusstopDB  ; integrated security=true";
+                using (SqlConnection connection = new SqlConnection(ConString))
+                {
+                    // Creating the command object
+                    //SqlCommand cmd = new SqlCommand("select BoardingPoint,TravelDate from BusInfo where Amount>450 ", connection);
+
+                    SqlCommand cmd = new SqlCommand("select * from Bus ", connection);
+
+                    // Opening Connection  
+                    connection.Open();
+                    // Executing the SQL query  
+                    SqlDataReader sdr = cmd.ExecuteReader();
+                    //Looping through each record
+                    while (sdr.Read())
+                    {
+                        
+                        //for 2nd query
+                        Console.WriteLine(sdr["BusId"] + ",  " + sdr["BoardingPoint"]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("OOPs, something went wrong.\n" + e);
+            }
+            Console.ReadKey();
+        }
+    }
+}
+
+
+
+Output:
+4,  PUN
+5,  MUM
+7,  MUM
+
+==============================================================================================================
+Q.2.1 Third Query 
+
+using System;
+using System.Data.SqlClient;
+
+namespace BusstopAssgQ2._1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            try
+            {
+                string ConString = "data source=INLEN8520076178\\SQLEXPRESS; database=BusstopDB  ; integrated security=true";
+                using (SqlConnection connection = new SqlConnection(ConString))
+                {
+                    // Creating the command object
+                    
+                    //for 2nd b
+                    SqlCommand cmd = new SqlCommand("select BusId,BoardingPoint from BusInfo where TravelDate='2017-12-10'", connection);
+
+                    // Opening Connection  
+                    connection.Open();
+                    // Executing the SQL query  
+                    SqlDataReader sdr = cmd.ExecuteReader();
+                    //Looping through each record
+                    while (sdr.Read())
+                    {
+                        
+                        //for 2nd query
+                        Console.WriteLine(sdr["BusId"] + ",  " + sdr["BoardingPoint"]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("OOPs, something went wrong.\n" + e);
+            }
+            Console.ReadKey();
+        }
+    }
+}
+
+
+Output:
+4,  PUN

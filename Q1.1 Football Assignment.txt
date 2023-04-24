@@ -1,0 +1,67 @@
+Q1.1.
+
+
+
+
+using System;
+using System.Data.SqlClient;
+
+namespace FootballAssQ1._1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            try
+            {
+                string ConString = "data source=INLEN8520076178\\SQLEXPRESS; database=FootballDB  ; integrated security=true";
+                using (SqlConnection connection = new SqlConnection(ConString))
+                {
+                    // Creating the command object
+                    SqlCommand cmd = new SqlCommand("select * from FootballMatch where Status_='Win' ", connection);
+
+//for Q.1.b
+                    //SqlCommand cmd = new SqlCommand("select * from FootballMatch where Status_='Draw' ", connection);
+
+
+//for Q.1.c
+                    SqlCommand cmd = new SqlCommand("select * from FootballMatch where TeamName1='Japan' OR TeamName2='Japan' ", connection);
+
+
+                    // Opening Connection  
+                    connection.Open();
+                    // Executing the SQL query  
+                    SqlDataReader sdr = cmd.ExecuteReader();
+                    //Looping through each record
+                    while (sdr.Read())
+                    {
+                        Console.WriteLine(sdr["MatchId"] + ",  " + sdr["TeamName1"] + ",  " + sdr["TeamName2"] + ",  " + sdr["Status_"] + ",  " + sdr["WinningTeam"] + ",  " + sdr["Points"]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("OOPs, something went wrong.\n" + e);
+            }
+            Console.ReadKey();
+        }
+    }
+}
+
+output:Q.1.a
+
+1001,  Italy,  France,  Win,  France,  4
+1003,  England,  Japan,  Win,  England,  4
+1004,  USA,  Russia,  Win,  Russia,  4
+1006,  Brazil,  France,  Win,  Brazil,  4
+1007,  England,  Russia,  Win,  Russia,  4
+
+
+output Q.1.b
+1002,  Brazil,  Portugal,  Draw,  (null),  2
+1005,  Portugal,  Italy,  Draw,  (null),  2
+1008,  Japan,  USA,  Draw,  (null),  2
+
+output Q.1.c
+1003,  England,  Japan,  Win,  England,  4
+1008,  Japan,  USA,  Draw,  (null),  2

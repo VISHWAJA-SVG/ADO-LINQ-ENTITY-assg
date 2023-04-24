@@ -1,0 +1,369 @@
+using System;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Data;
+
+namespace BusStopAssignment
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        //create  connection
+        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            //open database
+            con.Open();
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            SqlCommand cmd = new SqlCommand("Busdetails1", con);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add("@BusId", SqlDbType.Int).Value = TextBox5.Text;
+            cmd.Parameters.Add("@BoardingPoint", SqlDbType.VarChar).Value = DropDownList1.Text;
+            cmd.Parameters.Add("@TravelDate", SqlDbType.Date).Value = TextBox2.Text;
+            cmd.Parameters.Add("@Amount", SqlDbType.Decimal).Value = TextBox3.Text;
+            cmd.Parameters.Add("@Rating", SqlDbType.Int).Value = TextBox4.Text;
+
+            
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            //to display msg
+            Label1.Text = "Data inserted successfully";
+            GridView1.DataBind();
+           
+            TextBox2.Text = "";
+            TextBox3.Text = "";
+            TextBox4.Text = "";
+            TextBox5.Text = "";
+        }
+    }
+}
+
+
+
+===============================================================================
+
+create database BusstopDB;
+CREATE TABLE [dbo].[BusInfo]
+(
+	[BusId] int Identity(1,1) NOT NULL PRIMARY KEY, 
+    [BoardingPoint] varchar(20) NOT NULL, 
+    [TravelDate] DATE NOT NULL, 
+    [Amount] DECIMAL NOT NULL, 
+    [Rating] INT NOT NULL
+)
+
+CREATE PROCEDURE Busdetails1
+@BusId int,
+@BoardingPoint  varchar(20),
+@TravelDate date,
+@Amount decimal,
+@Rating int
+As
+BEGIN
+INSERT INTO 
+       BusInfo(BusId,BoardingPoint,TravelDate,Amount,Rating)
+	   values
+	   (@BusId , @BoardingPoint , @TravelDate , @Amount , @Rating)
+	   END
+
+
+
+USE [BusstopDB]
+GO
+/****** Object:  StoredProcedure [dbo].[Busdetails1]    Script Date: 31-03-2023 09:17:53 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[Busdetails1]
+@BusId int output,
+@BoardingPoint  varchar(20),
+@TravelDate date,
+@Amount decimal,
+@Rating int
+As
+BEGIN
+INSERT INTO 
+       BusInfo(BoardingPoint,TravelDate,Amount,Rating)
+	   values
+	   (@BoardingPoint , @TravelDate , @Amount , @Rating)
+
+	   SET @BusId=SCOPE_IDENTITY()
+	   RETURN @BusId
+	   END
+
+
+==============================================================================================
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="BusStopAssignment.WebForm1" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <style type="text/css">
+        .auto-style1 {
+            width: 100%;
+        }
+        .auto-style2 {
+            width: 191px;
+        }
+        .auto-style4 {
+            width: 135px;
+        }
+        .auto-style5 {
+            width: 228px;
+        }
+        .auto-style7 {
+            width: 228px;
+            text-align: center;
+            height: 56px;
+            font-size: large;
+            color: #FF3300;
+        }
+        .auto-style8 {
+            width: 135px;
+            height: 77px;
+        }
+        .auto-style10 {
+            width: 228px;
+            height: 77px;
+            text-align: left;
+        }
+        .auto-style11 {
+            width: 191px;
+            height: 77px;
+        }
+        .auto-style15 {
+            color: #FF0000;
+            font-size: x-large;
+        }
+        .auto-style16 {
+            width: 135px;
+            height: 33px;
+        }
+        .auto-style18 {
+            width: 228px;
+            height: 33px;
+        }
+        .auto-style19 {
+            width: 191px;
+            height: 33px;
+        }
+        .auto-style20 {
+            width: 181px;
+            height: 77px;
+        }
+        .auto-style22 {
+            width: 181px;
+        }
+        .auto-style23 {
+            width: 181px;
+            height: 33px;
+        }
+        .auto-style24 {
+            width: 135px;
+            height: 31px;
+        }
+        .auto-style25 {
+            width: 181px;
+            height: 31px;
+        }
+        .auto-style26 {
+            width: 228px;
+            height: 31px;
+        }
+        .auto-style27 {
+            width: 191px;
+            height: 31px;
+        }
+        .auto-style35 {
+            width: 135px;
+            height: 56px;
+        }
+        .auto-style36 {
+            width: 181px;
+            height: 56px;
+        }
+        .auto-style37 {
+            width: 191px;
+            height: 56px;
+        }
+        .auto-style38 {
+            width: 135px;
+            height: 28px;
+        }
+        .auto-style39 {
+            width: 181px;
+            height: 28px;
+        }
+        .auto-style40 {
+            width: 228px;
+            height: 28px;
+        }
+        .auto-style41 {
+            width: 191px;
+            height: 28px;
+        }
+        .auto-style42 {
+            width: 135px;
+            height: 4px;
+        }
+        .auto-style43 {
+            width: 181px;
+            height: 4px;
+        }
+        .auto-style44 {
+            width: 228px;
+            height: 4px;
+        }
+        .auto-style45 {
+            width: 191px;
+            height: 4px;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <table class="auto-style1">
+                <tr>
+                    <td class="auto-style8"></td>
+                    <td class="auto-style20"></td>
+                    <td class="auto-style10">&nbsp;&nbsp;&nbsp; <span class="auto-style15"><strong>&nbsp;PKR Travels</strong></span></td>
+                    <td class="auto-style11"></td>
+                    <td class="auto-style8"></td>
+                    <td class="auto-style8"></td>
+                </tr>
+                <tr>
+                    <td class="auto-style35"></td>
+                    <td class="auto-style36"></td>
+                    <td class="auto-style7"><strong>Add New Bus</strong></td>
+                    <td class="auto-style37"></td>
+                    <td class="auto-style35"></td>
+                    <td class="auto-style35"></td>
+                </tr>
+                <tr>
+                    <td class="auto-style38"></td>
+                    <td class="auto-style39">BusId</td>
+                    <td class="auto-style40">
+                        <asp:TextBox ID="TextBox5" runat="server"></asp:TextBox>
+                    </td>
+                    <td class="auto-style41"></td>
+                    <td class="auto-style38"></td>
+                    <td class="auto-style38"></td>
+                </tr>
+                <tr>
+                    <td class="auto-style42"></td>
+                    <td class="auto-style43">Boarding Point</td>
+                    <td class="auto-style44">
+                        <asp:DropDownList ID="DropDownList1" runat="server" DataSourceID="SqlDataSource3" DataTextField="BoardingPoint" DataValueField="BoardingPoint" Width="184px">
+                        <asp:ListItem>BGL</asp:ListItem>
+                        <asp:ListItem>HYD</asp:ListItem>
+                            <asp:ListItem>CHN</asp:ListItem>
+                            <asp:ListItem>PUN</asp:ListItem>
+                            <asp:ListItem>MUM</asp:ListItem>
+                        </asp:DropDownList>
+                        <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:BusstopDBConnectionString %>" SelectCommand="SELECT [BoardingPoint] FROM [BusInfo]"></asp:SqlDataSource>
+                    </td>
+                    <td class="auto-style45"></td>
+                    <td class="auto-style42"></td>
+                    <td class="auto-style42"></td>
+                </tr>
+                <tr>
+                    <td class="auto-style16"></td>
+                    <td class="auto-style23">Travel Date</td>
+                    <td class="auto-style18">
+                        <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
+                    </td>
+                    <td class="auto-style19"></td>
+                    <td class="auto-style16"></td>
+                    <td class="auto-style16"></td>
+                </tr>
+                <tr>
+                    <td class="auto-style4">&nbsp;</td>
+                    <td class="auto-style22">Amount</td>
+                    <td class="auto-style5">
+                        <asp:TextBox ID="TextBox3" runat="server"></asp:TextBox>
+                    </td>
+                    <td class="auto-style2">&nbsp;</td>
+                    <td class="auto-style4">&nbsp;</td>
+                    <td class="auto-style4">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="auto-style4">&nbsp;</td>
+                    <td class="auto-style22">Rating</td>
+                    <td class="auto-style5">
+                        <asp:TextBox ID="TextBox4" runat="server"></asp:TextBox>
+                    </td>
+                    <td class="auto-style2">&nbsp;</td>
+                    <td class="auto-style4">&nbsp;</td>
+                    <td class="auto-style4">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="auto-style4">&nbsp;</td>
+                    <td class="auto-style22">&nbsp;</td>
+                    <td class="auto-style5">&nbsp;</td>
+                    <td class="auto-style2">&nbsp;</td>
+                    <td class="auto-style4">&nbsp;</td>
+                    <td class="auto-style4">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="auto-style4">&nbsp;</td>
+                    <td class="auto-style22">
+                        <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Save Bus Date" />
+                    </td>
+                    <td class="auto-style5">&nbsp;</td>
+                    <td class="auto-style2">&nbsp;</td>
+                    <td class="auto-style4">&nbsp;</td>
+                    <td class="auto-style4">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="auto-style24"></td>
+                    <td class="auto-style25">
+                        <asp:Label ID="Label1" runat="server" BackColor="White" ForeColor="#009933" Text="Message"></asp:Label>
+                    </td>
+                    <td class="auto-style26"></td>
+                    <td class="auto-style27"></td>
+                    <td class="auto-style24"></td>
+                    <td class="auto-style24"></td>
+                </tr>
+                <tr>
+                    <td class="auto-style4">&nbsp;</td>
+                    <td class="auto-style22">
+                        <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" CellPadding="4" DataKeyNames="BusId" DataSourceID="SqlDataSource1" ForeColor="#333333" GridLines="None">
+                            <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
+                            <Columns>
+                                <asp:BoundField DataField="BusId" HeaderText="BusId" InsertVisible="False" ReadOnly="True" SortExpression="BusId" />
+                                <asp:BoundField DataField="BoardingPoint" HeaderText="BoardingPoint" SortExpression="BoardingPoint" />
+                                <asp:BoundField DataField="TravelDate" HeaderText="TravelDate" SortExpression="TravelDate" />
+                                <asp:BoundField DataField="Amount" HeaderText="Amount" SortExpression="Amount" />
+                                <asp:BoundField DataField="Rating" HeaderText="Rating" SortExpression="Rating" />
+                            </Columns>
+                            <EditRowStyle BackColor="#999999" />
+                            <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+                            <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+                            <PagerStyle BackColor="#284775" ForeColor="White" HorizontalAlign="Center" />
+                            <RowStyle BackColor="#F7F6F3" ForeColor="#333333" />
+                            <SelectedRowStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
+                            <SortedAscendingCellStyle BackColor="#E9E7E2" />
+                            <SortedAscendingHeaderStyle BackColor="#506C8C" />
+                            <SortedDescendingCellStyle BackColor="#FFFDF8" />
+                            <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
+                        </asp:GridView>
+                        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT * FROM [BusInfo]"></asp:SqlDataSource>
+                    </td>
+                    <td class="auto-style5">&nbsp;</td>
+                    <td class="auto-style2">&nbsp;</td>
+                    <td class="auto-style4">&nbsp;</td>
+                    <td class="auto-style4">&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+</html>
